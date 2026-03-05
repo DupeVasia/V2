@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arhiva Clasei - Mărturii și Ecouri</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Roboto:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .archive-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
+      }
+      .sticky-note {
+        background: #fff9c4;
+        padding: 20px;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+        transform: rotate(-1deg);
+        transition: var(--transition);
+        border-left: 5px solid #fbc02d;
+      }
+      .sticky-note:nth-child(even) {
+        transform: rotate(2deg);
+        background: #f0f4c3;
+        border-left-color: #afb42b;
+      }
+      .sticky-note:hover {
+        transform: scale(1.05) rotate(0deg);
+        z-index: 10;
+      }
+      .homework-form {
+        background: var(--white);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        margin-top: 60px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-family: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">Nicolae Dabija</div>
+      <ul>
+        <li><a href="index.html">Acasă</a></li>
+        <li><a href="mihai-ulmu.html">Mihai Ulmu</a></li>
+        <li><a href="drumul-mariei.html">Drumul Mariei</a></li>
+        <li><a href="vagonul-21.html">Vagonul 21</a></li>
+        <li><a href="arhiva.html">Arhiva</a></li>
+      </ul>
+    </nav>
+
+    <header
+      class="hero"
+      style="
+        height: 40vh;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+          url(&quot;https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=1473&quot;);
+        background-size: cover;
+      "
+    >
+      <div class="hero-content">
+        <h1>Arhiva Clasei</h1>
+        <p>„Tema pentru acasă e tema întregii vieți.”</p>
+      </div>
+    </header>
+
+    <section class="container">
+      <h2 class="section-title">Mărturii nemuritoare</h2>
+      <p style="text-align: center; max-width: 700px; margin: 0 auto">
+        Câteva dintre „lecțiile” predate de Mihai Ulmu și învățate de elevii săi
+        în școala dură a istoriei.
+      </p>
+
+      <div class="archive-grid">
+        <div class="sticky-note">
+          <p>
+            „Nu uitați că sunteți români, chiar și atunci când vi se cere să
+            uitați cine sunteți.”
+          </p>
+        </div>
+        <div class="sticky-note">
+          <p>
+            „Limba română este singura noastră patrie pe care nu o pot ocupa
+            tancurile.”
+          </p>
+        </div>
+        <div class="sticky-note">
+          <p>
+            „Dragostea este singurul pașaport care ne trece dincolo de orice
+            sârmă ghimpată.”
+          </p>
+        </div>
+        <div class="sticky-note">
+          <p>„Suferința trece, faptul de a fi suferit nu trece niciodată.”</p>
+        </div>
+      </div>
+
+      <div class="homework-form">
+        <h3
+          style="
+            margin-bottom: 20px;
+            font-family: &quot;Playfair Display&quot;, serif;
+          "
+        >
+          Predă tema ta
+        </h3>
+        <p style="margin-bottom: 30px">
+          Ce ai învățat tu din lectura acestui roman? Lasă un gând pentru arhiva
+          clasei.
+        </p>
+
+        <form action="#">
+          <div class="form-group">
+            <label>Numele tău (sau pseudonimul de elev)</label>
+            <input type="text" placeholder="Ex: Maria R." />
+          </div>
+          <div class="form-group">
+            <label>Gândul tău despre libertate</label>
+            <textarea rows="4" placeholder="Scrie aici..."></textarea>
+          </div>
+          <button
+            type="button"
+            class="btn"
+            onclick="alert('Tema a fost trimisă în arhivă!')"
+          >
+            Trimite Tema
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <footer>
+      <p>
+        &copy; 2026 - Proiect Literar Digital. „Fiecare zi e o pagină din tema
+        noastră.”
+      </p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

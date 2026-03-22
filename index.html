@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tema pentru acasă - Nicolae Dabija</title>
+    <title>Muzeul Digital - Între lecție și destin</title>
     <link rel="stylesheet" href="style.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Roboto:wght@300;400&display=swap"
@@ -12,7 +12,7 @@
   </head>
   <body>
     <nav class="navbar">
-      <div class="logo">Nicolae Dabija</div>
+      <a href="nicolaedabija.html" class="logo">Nicolae Dabija</a>
       <ul>
         <li><a href="index.html">Acasă</a></li>
         <li><a href="mihai-ulmu.html">Mihai Ulmu</a></li>
@@ -24,14 +24,51 @@
 
     <header id="acasa" class="hero">
       <div class="hero-content">
-        <h1>Tema pentru acasă</h1>
+        <h1>Între lecție și destin</h1>
         <p>
-          O lecție despre demnitate, iubire și libertate care depășește
-          granițele sârmei ghimpate.
+          O investigație STEAM asupra romanului „Tema pentru acasă” de Nicolae
+          Dabija.
         </p>
-        <a href="#despre" class="btn">Descoperă Povestea</a>
+        <a href="#steam-intro" class="btn">Proiectul STEAM</a>
       </div>
     </header>
+
+    <section id="steam-intro" class="container steam-section">
+      <h2 class="section-title">Centrul de cercetare Ulmu</h2>
+      <div class="steam-content">
+        <p>
+          Acest proiect reprezintă o incursiune interdisciplinară în universul
+          romanului, unde literatura se întâlnește cu rigoarea matematicii și
+          tehnologia modernă. Prin <strong>STEAM</strong>, am transformat
+          „cifrele reci” ale istoriei în mărturii vii: am modelat 3D „Vagonul
+          21”, am cartografiat drumul Mariei și am analizat statistic
+          probabilitatea regăsirii în imensitatea Siberiei.
+        </p>
+        <div class="quote-central">
+          <blockquote>
+            „Cea mai grea temă pentru acasă e viața însăși.”
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="video-section container">
+      <h2 class="section-title">Introducere Video</h2>
+      <div class="video-player" id="main-video">
+        <div class="video-overlay" onclick="startVideo()">
+          <div class="play-button"></div>
+          <p>Apasă pentru a viziona introducerea</p>
+        </div>
+        <video
+          id="video-element"
+          width="100%"
+          poster="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=1473"
+        >
+          <source src="" type="video/mp4" />
+          Browserul tău nu suportă tag-ul video.
+        </video>
+      </div>
+    </section>
 
     <section id="despre" class="container">
       <h2 class="section-title">Rezumatul Operei</h2>
@@ -49,11 +86,6 @@
             pornește într-o odisee personală pentru a-l găsi, demonstrând că
             iubirea este singura forță capabilă să învingă teroarea istoriei.
           </p>
-        </div>
-        <div class="image-placeholder">
-          <div class="overlay-text">
-            "Să fiți buni, pentru că e mai greu decât să fiți răi."
-          </div>
         </div>
       </div>
     </section>
@@ -73,6 +105,31 @@
           <p>
             Simbolul devotamentului pur, femeia care transformă suferința în
             speranță și sacrificiu.
+          </p>
+        </div>
+      </div>
+
+      <h3 class="section-subtitle">Personaje Secundare și Epizodice</h3>
+      <div class="character-cards">
+        <div class="card">
+          <h3>Stalin și Regimul Sovietic</h3>
+          <p>
+            Reprezentanți ai opresiunii ideologice care condamnă orice act de
+            rezistență spirituală și cultură autentică.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Tovarășul Comandant</h3>
+          <p>
+            Simbol al sistemului totalitar și al brutalității lagărului din
+            Siberia, epitomul răului institutional.
+          </p>
+        </div>
+        <div class="card">
+          <h3>Constantin Ulmu</h3>
+          <p>
+            Fratele lui Mihai, martor la trădarea și sacrificiul acestuia,
+            purtător al memoriei și durerii familiale.
           </p>
         </div>
       </div>

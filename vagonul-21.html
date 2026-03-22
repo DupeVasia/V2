@@ -19,7 +19,7 @@
       }
       .blueprint {
         background: #222;
-        color: #00ff00; /* Verde tip monitor vechi/tehnic */
+        color: #00ff00;
         padding: 30px;
         font-family: "Courier New", monospace;
         border: 2px solid #444;
@@ -36,11 +36,70 @@
         list-style: none;
         line-height: 1.8;
       }
+      .model-section {
+        margin-top: 60px;
+        background: #fff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+      .model-gallery {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-bottom: 30px;
+      }
+
+      .model-gallery img {
+        flex: 1;
+        min-width: 300px;
+        max-width: 48%;
+        height: auto;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        object-fit: contain;
+        background: #f9f9f9;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .tour-banner {
+        margin-top: 60px;
+        background: linear-gradient(135deg, #1a1a1b 0%, #2d3436 100%);
+        color: white;
+        text-align: center;
+        padding: 60px 20px;
+        border-radius: 10px;
+        border: 1px solid #444;
+      }
+
+      .btn-tour {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 15px 30px;
+        background-color: #8b4513;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .btn-tour:hover {
+        background-color: #5c2e0b;
+      }
+      @media (max-width: 768px) {
+        .model-gallery img {
+          max-width: 100%;
+        }
+      }
     </style>
   </head>
   <body>
     <nav class="navbar">
-      <div class="logo">Nicolae Dabija</div>
+      <a href="nicolaedabija.html" class="logo">Nicolae Dabija</a>
       <ul>
         <li><a href="index.html">Acasă</a></li>
         <li><a href="mihai-ulmu.html">Mihai Ulmu</a></li>
@@ -56,7 +115,7 @@
         height: 40vh;
         background:
           linear-gradient(rgba(150, 150, 150, 0.4), rgba(150, 150, 150, 0.4)),
-          url(&quot;https://imgs.search.brave.com/tGUSLGC7jVuQqostsPZG5QxXxaX3rmCkBJjFmkmkEkY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jNy5z/dGF0aWNmbGlja3Iu/Y29tLzkvODU0My84/NzA5Njc0MjA2XzNl/MmU2NGExY2MuanBn&quot;);
+          url(vagonul\ antet.png);
         background-size: cover;
         background-position: center;
       "
@@ -104,9 +163,75 @@
           </div>
         </div>
       </div>
+
+      <div class="model-section">
+        <h2 class="section-title">Reconstrucție 3D: Proporțiile Suferinței</h2>
+
+        <div class="model-gallery">
+          <img
+            src="model-exterior.png"
+            alt="Model 3D Exterior Vagon: Vedere de ansamblu și proporții"
+          />
+          <img
+            src="model-interior.png"
+            alt="Model 3D Interior Vagon: Detaliu nari și soba Burjuika"
+          />
+        </div>
+
+        <div class="text-box" style="padding: 0">
+          <p>
+            <strong>Explicația tehnică a designului:</strong> Modelul 3D de mai
+            sus a fost conceput respectând proporțiile reale (aprox. 7 metri
+            lungime pe 2.7 metri lățime). Am ales acest design auster pentru a
+            evidenția contrastul brutal dintre destinația inițială a vagonului
+            (transportul vitelor sau al mărfurilor grele) și utilizarea sa
+            pentru ființe umane.
+          </p>
+          <p>
+            Se poate observa dispunerea celor două niveluri de scânduri brute
+            (nari) pe care deportații trebuiau să doarmă, lipsa totală a
+            facilităților sanitare adecvate și fereastra minusculă care nu
+            oferea nici suficient oxigen, nici o perspectivă clară asupra
+            drumului. Din punct de vedere istoric, această structură nu era o
+            eroare de design, ci o alegere deliberată a sistemului pentru a
+            frânge rezistența psihologică a prizonierilor înainte ca aceștia să
+            ajungă în Siberia.
+          </p>
+        </div>
+      </div>
+
+      <div class="tour-banner">
+        <h2
+          style="
+            font-family: &quot;Playfair Display&quot;, serif;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+          "
+        >
+          Explorează Istoria
+        </h2>
+        <p style="font-size: 1.1rem; max-width: 600px; margin: 0 auto">
+          Pășește dincolo de paginile romanului. Vizitează muzeul virtual
+          explorat de elevii noștri pentru a înțelege peisajul și condițiile
+          reale ale exilului siberian.
+        </p>
+        <a
+          href="https://iontopala2007-ship-it.github.io/Muzeul/slideshow_siberia-1.html"
+          target="_blank"
+          class="btn-tour"
+          >Începe Turul Virtual</a
+        >
+      </div>
     </section>
 
-    <footer style="margin-top: 50px">
+    <footer
+      style="
+        margin-top: 50px;
+        text-align: center;
+        padding: 20px 0;
+        border-top: 1px solid #ddd;
+      "
+    >
       <p>&copy; 2026 - Proiect Transdisciplinar (Tehnologie și Artă)</p>
     </footer>
 

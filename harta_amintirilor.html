@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harta Amintirilor — Maria Răzeșu</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --snow: #f8f9fb;
+    --ice: #e8eef5;
+    --frost: #c9d8e8;
+    --deep-ice: #8aaec8;
+    --steel: #4a6680;
+    --night: #1c2a38;
+    --accent: #3a7abf;
+    --text: #1c2a38;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--snow);
+    font-family: 'EB Garamond', Georgia, serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(180,210,235,0.25) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .snow-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .flake {
+    position: absolute;
+    top: -10px;
+    color: rgba(140,190,225,0.55);
+    animation: fall linear infinite;
+    user-select: none;
+  }
+
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  .content { position: relative; z-index: 2; }
+
+  header {
+    text-align: center;
+    padding: 50px 20px 28px;
+    background: linear-gradient(180deg, rgba(195,218,238,0.35) 0%, transparent 100%);
+    border-bottom: 1px solid var(--frost);
+  }
+
+  .subtitle {
+    font-size: 0.72rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin-bottom: 14px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 400;
+    color: var(--night);
+    line-height: 1.15;
+  }
+
+  h1 em { font-style: italic; color: var(--accent); }
+
+  .header-sub {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--steel);
+    letter-spacing: 0.1em;
+  }
+
+  .header-line {
+    width: 120px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--frost), transparent);
+    margin: 20px auto 0;
+  }
+
+  .instruction {
+    text-align: center;
+    padding: 18px 20px;
+    font-size: 0.85rem;
+    color: var(--steel);
+  }
+
+  .instruction span {
+    display: inline-block;
+    background: var(--ice);
+    border: 1px solid var(--frost);
+    padding: 6px 20px;
+    border-radius: 20px;
+    color: var(--accent);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .map-wrap {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 10px 20px 40px;
+  }
+
+  .map-box {
+    background: white;
+    border: 1px solid var(--frost);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(100,140,180,0.15);
+  }
+
+  svg.map { width: 100%; display: block; }
+
+  .route-line {
+    stroke: var(--accent);
+    stroke-width: 1.8;
+    fill: none;
+    stroke-dasharray: 8 5;
+    stroke-linecap: round;
+    animation: dash 2.5s linear infinite;
+    opacity: 0.45;
+  }
+
+  @keyframes dash { to { stroke-dashoffset: -52; } }
+
+  .map-point { cursor: pointer; }
+
+  .map-point .ring {
+    fill: none; stroke: var(--accent);
+    stroke-width: 1; opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .map-point:hover .ring { opacity: 0.3; }
+
+  .map-point .dot-bg {
+    fill: white; stroke: var(--frost); stroke-width: 1.5;
+    transition: stroke 0.2s, filter 0.2s;
+  }
+  .map-point:hover .dot-bg,
+  .map-point.active .dot-bg {
+    stroke: var(--accent);
+    filter: drop-shadow(0 0 6px rgba(58,122,191,0.5));
+  }
+
+  .map-point .dot-in { fill: var(--frost); transition: fill 0.2s; }
+  .map-point:hover .dot-in,
+  .map-point.active .dot-in { fill: var(--accent); }
+
+  .map-point .lbl-n {
+    fill: var(--night); font-family: 'Playfair Display', serif;
+    font-size: 9px; font-style: italic; pointer-events: none;
+  }
+  .map-point .lbl-p {
+    fill: var(--steel); font-family: 'EB Garamond', serif;
+    font-size: 11px; pointer-events: none;
+  }
+
+  /* PANEL */
+  .overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(28,42,56,0.5);
+    backdrop-filter: blur(5px);
+    z-index: 500;
+    align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .panel {
+    background: white;
+    border-radius: 8px;
+    max-width: 480px; width: 100%;
+    box-shadow: 0 24px 80px rgba(20,40,60,0.3), 0 0 0 1px var(--frost);
+    overflow: hidden;
+    animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    position: relative;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(28px) scale(0.96); opacity: 0; }
+    to   { transform: translateY(0)    scale(1);    opacity: 1; }
+  }
+
+  .p-progress { height: 3px; background: var(--ice); }
+  .p-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--frost), var(--accent));
+    transition: width 0.35s;
+  }
+
+  .p-close {
+    position: absolute; top: 14px; right: 14px;
+    width: 30px; height: 30px;
+    border: 1px solid var(--frost); border-radius: 50%;
+    background: var(--snow); color: var(--steel);
+    font-size: 0.95rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, color 0.2s; z-index: 10;
+  }
+  .p-close:hover { background: var(--night); color: white; border-color: var(--night); }
+
+  .p-header {
+    padding: 26px 28px 20px;
+    border-bottom: 1px solid var(--ice);
+    position: relative;
+  }
+
+  .p-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem; font-style: italic;
+    color: var(--ice);
+    position: absolute; top: 8px; right: 18px;
+    line-height: 1; user-select: none; pointer-events: none;
+  }
+
+  .p-tag {
+    font-size: 0.68rem; letter-spacing: 0.35em;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .p-tag::before {
+    content: ''; width: 20px; height: 1px;
+    background: var(--accent); opacity: 0.5; display: inline-block;
+  }
+
+  .p-place {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem; font-weight: 400;
+    color: var(--night); margin-bottom: 4px;
+  }
+
+  .p-date { font-size: 0.85rem; color: var(--steel); letter-spacing: 0.08em; }
+
+  .p-body { padding: 22px 28px 26px; }
+
+  .p-icon { font-size: 2rem; display: block; margin-bottom: 14px; }
+
+  .p-quote {
+    font-style: italic; font-size: 1.05rem;
+    line-height: 1.7; color: var(--night);
+    border-left: 3px solid var(--frost);
+    padding-left: 16px; margin-bottom: 18px;
+    position: relative;
+  }
+  .p-quote::before {
+    content: '"';
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem; color: var(--frost);
+    position: absolute; top: -10px; left: -8px; line-height: 1;
+  }
+
+  .p-desc { font-size: 0.95rem; line-height: 1.7; color: var(--steel); }
+
+  .p-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 28px;
+    border-top: 1px solid var(--ice);
+    background: var(--snow);
+  }
+
+  .nav-btn {
+    font-size: 0.8rem; letter-spacing: 0.1em;
+    color: var(--accent); cursor: pointer;
+    background: none; border: 1px solid var(--frost);
+    padding: 6px 14px; border-radius: 3px;
+    transition: all 0.2s;
+    font-family: 'EB Garamond', serif;
+  }
+  .nav-btn:hover { background: var(--accent); color: white; border-color: var(--accent); }
+  .nav-btn:disabled { opacity: 0.3; pointer-events: none; }
+
+  .nav-dots { display: flex; gap: 6px; }
+
+  .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--frost); transition: background 0.2s;
+    cursor: pointer;
+  }
+  .nav-dot.active { background: var(--accent); }
+
+  footer {
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 0.78rem;
+    color: var(--deep-ice);
+    border-top: 1px solid var(--ice);
+    letter-spacing: 0.1em;
+    position: relative; z-index: 2;
+  }
+</style>
+</head>
+<body>
+
+<div class="snow-layer" id="snowLayer"></div>
+
+<div class="content">
+  <header>
+    <p class="subtitle">Informatică · Harta Amintirilor</p>
+    <h1>Traseul <em>Mariei Răzeșu</em></h1>
+    <p class="header-sub">Basarabia → Siberia &nbsp;·&nbsp; 1941 – 1956</p>
+    <div class="header-line"></div>
+  </header>
+
+  <p class="instruction"><span>❄️ Click pe un punct de pe hartă pentru detalii</span></p>
+
+  <div class="map-wrap">
+    <div class="map-box">
+      <svg class="map" viewBox="0 0 800 330" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#eff5fb"/>
+            <stop offset="100%" stop-color="#e2edf6"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="330" fill="url(#bg)"/>
+
+        <!-- grid -->
+        <g opacity="0.05" stroke="#4a6680" stroke-width="0.5">
+          <line x1="0" y1="82" x2="800" y2="82"/>
+          <line x1="0" y1="165" x2="800" y2="165"/>
+          <line x1="0" y1="247" x2="800" y2="247"/>
+          <line x1="200" y1="0" x2="200" y2="330"/>
+          <line x1="400" y1="0" x2="400" y2="330"/>
+          <line x1="600" y1="0" x2="600" y2="330"/>
+        </g>
+
+        <!-- Basarabia -->
+        <path d="M 108,174 Q 144,147 178,158 Q 200,138 222,152 Q 244,142 252,165 Q 258,185 242,202 Q 224,220 196,215 Q 165,224 142,208 Q 112,196 108,174Z"
+          fill="rgba(58,122,191,0.07)" stroke="rgba(58,122,191,0.25)" stroke-width="1"/>
+        <!-- Ukraine -->
+        <path d="M 248,154 Q 295,128 348,138 Q 390,128 418,150 Q 428,172 406,190 Q 374,207 332,200 Q 288,212 258,196 Q 246,178 248,154Z"
+          fill="rgba(58,122,191,0.05)" stroke="rgba(58,122,191,0.14)" stroke-width="1"/>
+        <!-- Russia -->
+        <path d="M 408,127 Q 470,107 552,118 Q 630,111 688,127 Q 728,143 730,172 Q 720,202 680,212 Q 620,222 548,216 Q 468,222 408,204 Q 392,184 392,161 Q 396,141 408,127Z"
+          fill="rgba(58,122,191,0.04)" stroke="rgba(58,122,191,0.1)" stroke-width="1"/>
+        <!-- Siberia highlight -->
+        <path d="M 626,93 Q 692,76 748,90 Q 762,112 752,142 Q 730,148 688,127 Q 648,116 626,93Z"
+          fill="rgba(195,218,240,0.3)" stroke="rgba(58,122,191,0.3)" stroke-width="1.2"/>
+
+        <!-- Snow dots -->
+        <g fill="rgba(90,150,205,0.35)" font-size="8" font-family="serif">
+          <text x="634" y="107">❄</text><text x="657" y="97">❄</text>
+          <text x="679" y="105">❄</text><text x="703" y="97">❄</text>
+          <text x="724" y="107">❄</text><text x="717" y="126">❄</text>
+          <text x="697" y="116">❄</text>
+        </g>
+
+        <!-- Labels -->
+        <text x="168" y="192" font-family="EB Garamond,serif" font-size="9" fill="rgba(74,102,128,0.45)" letter-spacing="1" text-anchor="middle">BASARABIA</text>
+        <text x="335" y="172" font-family="EB Garamond,serif" font-size="9" fill="rgba(74,102,128,0.35)" letter-spacing="1" text-anchor="middle">UCRAINA</text>
+        <text x="548" y="172" font-family="EB Garamond,serif" font-size="9" fill="rgba(74,102,128,0.3)" letter-spacing="1" text-anchor="middle">U.R.S.S.</text>
+        <text x="682" y="117" font-family="EB Garamond,serif" font-size="9" fill="rgba(58,122,191,0.6)" letter-spacing="1" text-anchor="middle">SIBERIA</text>
+
+        <!-- Route -->
+        <path class="route-line"
+          d="M 192,176 C 230,162 280,152 332,150 C 390,148 432,144 484,138 C 544,132 602,120 660,107"/>
+
+        <!-- POINT 1 -->
+        <g class="map-point" id="mp1" onclick="openPanel(1)">
+          <circle class="ring" cx="170" cy="180" r="14"/>
+          <circle class="dot-bg" cx="170" cy="180" r="9"/>
+          <circle class="dot-in" cx="170" cy="180" r="5"/>
+          <text class="lbl-n" x="170" y="183" text-anchor="middle">1</text>
+          <text class="lbl-p" x="183" y="173">Sat natal</text>
+        </g>
+
+        <!-- POINT 2 -->
+        <g class="map-point" id="mp2" onclick="openPanel(2)">
+          <circle class="ring" cx="220" cy="164" r="14"/>
+          <circle class="dot-bg" cx="220" cy="164" r="9"/>
+          <circle class="dot-in" cx="220" cy="164" r="5"/>
+          <text class="lbl-n" x="220" y="167" text-anchor="middle">2</text>
+          <text class="lbl-p" x="233" y="157">Chișinău</text>
+        </g>
+
+        <!-- POINT 3 -->
+        <g class="map-point" id="mp3" onclick="openPanel(3)">
+          <circle class="ring" cx="296" cy="152" r="14"/>
+          <circle class="dot-bg" cx="296" cy="152" r="9"/>
+          <circle class="dot-in" cx="296" cy="152" r="5"/>
+          <text class="lbl-n" x="296" y="155" text-anchor="middle">3</text>
+          <text class="lbl-p" x="309" y="145">Gara</text>
+        </g>
+
+        <!-- POINT 4 -->
+        <g class="map-point" id="mp4" onclick="openPanel(4)">
+          <circle class="ring" cx="488" cy="138" r="14"/>
+          <circle class="dot-bg" cx="488" cy="138" r="9"/>
+          <circle class="dot-in" cx="488" cy="138" r="5"/>
+          <text class="lbl-n" x="488" y="141" text-anchor="middle">4</text>
+          <text class="lbl-p" x="501" y="131">Munții Urali</text>
+        </g>
+
+        <!-- POINT 5 -->
+        <g class="map-point" id="mp5" onclick="openPanel(5)">
+          <circle class="ring" cx="660" cy="108" r="16"/>
+          <circle class="dot-bg" cx="660" cy="108" r="10"/>
+          <circle class="dot-in" cx="660" cy="108" r="6"/>
+          <text class="lbl-n" x="660" y="112" text-anchor="middle">5</text>
+          <text class="lbl-p" x="674" y="101">Siberia</text>
+        </g>
+
+        <!-- Compass -->
+        <g transform="translate(38,272)" opacity="0.35">
+          <circle cx="0" cy="0" r="16" fill="none" stroke="#8aaec8" stroke-width="1"/>
+          <line x1="0" y1="-12" x2="0" y2="12" stroke="#4a6680" stroke-width="1"/>
+          <line x1="-12" y1="0" x2="12" y2="0" stroke="#4a6680" stroke-width="1"/>
+          <polygon points="0,-12 -3,-4 3,-4" fill="#3a7abf"/>
+          <text x="0" y="-17" text-anchor="middle" fill="#4a6680" font-size="8" font-family="EB Garamond,serif">N</text>
+        </g>
+
+        <!-- Scale -->
+        <g transform="translate(610,294)" opacity="0.4">
+          <line x1="0" y1="0" x2="80" y2="0" stroke="#4a6680" stroke-width="1"/>
+          <line x1="0" y1="-4" x2="0" y2="4" stroke="#4a6680" stroke-width="1"/>
+          <line x1="80" y1="-4" x2="80" y2="4" stroke="#4a6680" stroke-width="1"/>
+          <text x="40" y="-7" text-anchor="middle" fill="#4a6680" font-size="8" font-family="EB Garamond,serif">~3500 km</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <footer>Harta interactivă a amintirilor &nbsp;·&nbsp; Maria Răzeșu &nbsp;·&nbsp; Informatică 2025–2026</footer>
+</div>
+
+<!-- OVERLAY PANEL -->
+<div class="overlay" id="overlay" onclick="closeOnOverlay(event)">
+  <div class="panel" id="panel">
+    <div class="p-progress"><div class="p-progress-fill" id="pFill"></div></div>
+    <button class="p-close" onclick="closePanel()">✕</button>
+    <div class="p-header">
+      <div class="p-num" id="pNum"></div>
+      <p class="p-tag" id="pTag"></p>
+      <h2 class="p-place" id="pPlace"></h2>
+      <p class="p-date" id="pDate"></p>
+    </div>
+    <div class="p-body">
+      <span class="p-icon" id="pIcon"></span>
+      <p class="p-quote" id="pQuote"></p>
+      <p class="p-desc" id="pDesc"></p>
+    </div>
+    <div class="p-nav">
+      <button class="nav-btn" id="btnPrev" onclick="navigate(-1)">← Anterior</button>
+      <div class="nav-dots" id="navDots"></div>
+      <button class="nav-btn" id="btnNext" onclick="navigate(1)">Următor →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Snow
+  const sl = document.getElementById('snowLayer');
+  for (let i = 0; i < 45; i++) {
+    const f = document.createElement('div');
+    f.className = 'flake';
+    f.textContent = ['❄','❅','❆','·','✦'][Math.floor(Math.random()*5)];
+    f.style.cssText = `left:${Math.random()*100}vw;font-size:${6+Math.random()*12}px;animation-duration:${6+Math.random()*10}s;animation-delay:${-Math.random()*10}s;opacity:${0.25+Math.random()*0.45};`;
+    sl.appendChild(f);
+  }
+
+  const pts = [
+    { num:'I',   tag:'Punct 1 · Origine',    place:'Satul natal, Basarabia',   date:'Înainte de 1941',  icon:'🏡',
+      quote:'Acasă era locul unde pâinea mirosea a duminică și câmpurile nu aveau capăt.',
+      desc:'Copilăria Mariei în Basarabia — viața rurală, familia, tradițiile și pământul moștenit din generații. Un loc al liniștii care urma să fie smuls brutal.' },
+    { num:'II',  tag:'Punct 2 · Ridicarea',   place:'Chișinău',                 date:'13 iunie 1941',    icon:'🚨',
+      quote:'Nimeni nu știa unde mergem. Soldații nu răspundeau. Era noapte și frica nu mai avea formă.',
+      desc:'Operațiunea sovietică de deportare: zeci de mii de basarabeni ridicați din case în toiul nopții. Familii despărțite, bagaje minime, nicio explicație.' },
+    { num:'III', tag:'Punct 3 · Transportul', place:'Gara — Vagonul de Vite',   date:'Vară, 1941',       icon:'🚂',
+      quote:'Vagoanele nu aveau ferestre. Aerul era al tuturor și nu era destul pentru nimeni.',
+      desc:'Săptămâni întregi în vagoane de marfă suprapopulate, fără apă sau hrană suficientă. Mulți nu au supraviețuit acestui drum al suferinței.' },
+    { num:'IV',  tag:'Punct 4 · Granița',     place:'Munții Urali',             date:'Iulie 1941',       icon:'⛰️',
+      quote:'Dincolo de munți simțeam că Europa rămâne în urmă — ca o ușă care se închide fără cheie.',
+      desc:'Trecerea Uralilor — granița simbolică și geografică dintre Europa și Asia. Momentul în care întoarcerea devenea greu de imaginat.' },
+    { num:'V',   tag:'Punct 5 · Destinația',  place:'Siberia — Lagărul',        date:'1941 – 1956',      icon:'❄️',
+      quote:'Frigul siberian nu era doar al iernii — era în oameni, în tăcere, în uitarea celor de acasă.',
+      desc:'Ani de muncă forțată la temperaturi de -40°C. Maria supraviețuiește, păstrând vie memoria satului natal și speranța întoarcerii acasă.' }
+  ];
+
+  let cur = 0;
+
+  // Build nav dots
+  const dotsEl = document.getElementById('navDots');
+  for (let i = 0; i < 5; i++) {
+    const d = document.createElement('div');
+    d.className = 'nav-dot';
+    d.onclick = () => { cur = i; renderPanel(); updateActivePoint(); };
+    dotsEl.appendChild(d);
+  }
+
+  function openPanel(n) {
+    cur = n - 1;
+    renderPanel();
+    document.getElementById('overlay').classList.add('open');
+    updateActivePoint();
+  }
+
+  function renderPanel() {
+    const p = pts[cur];
+    document.getElementById('pNum').textContent   = p.num;
+    document.getElementById('pTag').textContent   = p.tag;
+    document.getElementById('pPlace').textContent = p.place;
+    document.getElementById('pDate').textContent  = p.date;
+    document.getElementById('pIcon').textContent  = p.icon;
+    document.getElementById('pQuote').textContent = p.quote;
+    document.getElementById('pDesc').textContent  = p.desc;
+    document.getElementById('pFill').style.width  = ((cur+1)/5*100) + '%';
+    document.getElementById('btnPrev').disabled   = cur === 0;
+    document.getElementById('btnNext').disabled   = cur === 4;
+    dotsEl.querySelectorAll('.nav-dot').forEach((d,i) => d.classList.toggle('active', i===cur));
+  }
+
+  function updateActivePoint() {
+    for (let i = 1; i <= 5; i++) document.getElementById('mp'+i).classList.remove('active');
+    document.getElementById('mp'+(cur+1)).classList.add('active');
+  }
+
+  function navigate(dir) {
+    if (cur+dir < 0 || cur+dir > 4) return;
+    cur += dir;
+    renderPanel();
+    updateActivePoint();
+  }
+
+  function closePanel() {
+    document.getElementById('overlay').classList.remove('open');
+    for (let i = 1; i <= 5; i++) document.getElementById('mp'+i).classList.remove('active');
+  }
+
+  function closeOnOverlay(e) { if (e.target === document.getElementById('overlay')) closePanel(); }
+
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('overlay').classList.contains('open')) return;
+    if (e.key === 'Escape') closePanel();
+    if (e.key === 'ArrowRight') navigate(1);
+    if (e.key === 'ArrowLeft') navigate(-1);
+  });
+</script>
+</body>
+</html>
